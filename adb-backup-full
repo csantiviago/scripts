@@ -4,7 +4,7 @@ DEST="$HOME/Dropbox/Backup/Android/backup-full-$(date +%F).ab"
 
 echo "Starting adb backup at $(date +%T)..."
 ./adb backup -apk -all -shared -nosystem -f "$DEST"
-if [ $? -eq 0 ];
+if [ $? -eq 0 ]
 then
 	echo "Backup completed at $(date +%T)."
 else
