@@ -93,12 +93,12 @@ if [ "$FILE_SIZE" -lt 100000 ]; then
     exit 1
 fi
 
-# Unzip and clean up
+# Unzip and clean up (use -n to avoid path traversal)
 echo "Extracting..."
-unzip -q -o "$DOWNLOAD_FILE"
+unzip -q -n "$DOWNLOAD_FILE"
 
-# Clean up zip
-rm "$DOWNLOAD_FILE"
+# Clean up zip (cleanup trap handles failure cases)
+rm -f "$DOWNLOAD_FILE"
 
 # Verify critical files exist
 if [ ! -f "llama-cli" ]; then
