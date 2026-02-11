@@ -47,6 +47,10 @@ echo "Target: $LLAMA_DIR"
 # Create target directory if it doesn't exist
 mkdir -p "$LLAMA_DIR"
 
+# Create old binaries directory for backup
+OLD_DIR="$LLAMA_DIR/.old"
+mkdir -p "$OLD_DIR"
+
 # Fetch latest release info
 echo "Fetching latest release from $OWNER/$REPO..."
 LATEST_URL="https://api.github.com/repos/$OWNER/$REPO/releases/latest"
@@ -103,9 +107,10 @@ if [ "$FILE_SIZE" -lt 100000 ]; then
     exit 1
 fi
 
-# Clean up old binaries before extraction to ensure updates work
-echo "Cleaning old binaries..."
-rm -f llama-*.so llama-cli llama-server llama-core.txt
+# Move old zip files to .old directory
+echo "Moving old binaries to backup..."
+mv llama-*.so llama-cli llama-server llama-core.txt "$OLD_DIR/" 2>/dev/null || true
+mv llama-*.zip "$OLD_DIR/" 2>/dev/null || true
 
 # Extract (allow overwrites for update support, use -L for symlinks)
 echo "Extracting..."
