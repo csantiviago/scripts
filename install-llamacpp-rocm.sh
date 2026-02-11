@@ -9,6 +9,12 @@ OWNER="lemonade-sdk"
 REPO="llamacpp-rocm"
 FORCE="${FORCE:-0}"
 
+# Cleanup trap for partial downloads
+cleanup() {
+    rm -f "$LLAMA_DIR/llama-rocm.zip"
+}
+trap cleanup EXIT
+
 # Safety: Ensure we're on Linux
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
     echo "Error: This script is for Linux only. ROCm requires Linux."
