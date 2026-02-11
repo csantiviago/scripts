@@ -58,8 +58,7 @@ echo "Latest release: $TAG"
 
 # Find asset URL for RX 7900 XTX (gfx110X = RDNA 3, RX 7000 series)
 # Assets are named like: llama-{tag}-ubuntu-rocm-gfx110X-x64.zip
-ASSET_URL=$(echo "$ASSETS_JSON" | jq -r '.assets[] | select(.name | contains("gfx110X") and contains("ubuntu")) | .browser_download_url' 2>/dev/null || \
-    echo "$ASSETS_JSON" | grep '"browser_download_url": "[^"]*ubuntu[^"]*gfx110X[^"]*"' | sed 's/"browser_download_url": "\(.*\)"/\1/')
+ASSET_URL=$(echo "$ASSETS_JSON" | jq -r '.assets[] | select(.name | contains("gfx110X") and contains("ubuntu")) | .browser_download_url' 2>/dev/null)
 
 if [ -z "$ASSET_URL" ]; then
     echo "Error: Could not find asset URL for gfx110X Ubuntu"
