@@ -107,15 +107,15 @@ if [ "$FILE_SIZE" -lt 100000 ]; then
     exit 1
 fi
 
-# Move old binaries to .old directory
+# Move old binaries to .old directory (backup everything except .old and zip)
 echo "Moving old binaries to backup..."
-shopt -s nullglob
-for file in llama-*.so llama-cli llama-server llama-core.txt llama-*.zip; do
-    if [ -f "$file" ]; then
-        mv "$file" "$OLD_DIR/"
+shopt -s nullglob dotglob
+for item in *; do
+    if [ -f "$item" ] && [ "$item" != "llama-rocm.zip" ]; then
+        mv "$item" "$OLD_DIR/"
     fi
 done
-shopt -u nullglob
+shopt -u nullglob dotglob
 
 # Extract (allow overwrites for update support, use -L for symlinks)
 echo "Extracting..."
