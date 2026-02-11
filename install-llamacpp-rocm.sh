@@ -103,12 +103,25 @@ if [ "$FILE_SIZE" -lt 100000 ]; then
     exit 1
 fi
 
-# Unzip and clean up (use -n to avoid path traversal)
+# Clean up old binaries before extraction to ensure updates work
+echo "Cleaning old binaries..."
+rm -f llama-*.so llama-cli llama-server llama-core.txt
+
+# Extract (allow overwrites for update support, use -L for symlinks)
 echo "Extracting..."
-unzip -q -n "$DOWNLOAD_FILE"
+unzip -q -o -L "$DOWNLOAD_FILE"
 
 # Clean up zip (cleanup trap handles failure cases)
 rm -f "$DOWNLOAD_FILE"
+
+# Move contents up one level if zip had a top-level directory
+for item in llama-*; do
+    if [ -d "$item" ]; then
+        # Move all contents from the extracted directory to current dir
+        find "$item" -maxdepth 1 -type f -exec mv {} . \;
+        rmdir "$item"
+    fi
+done
 
 # Verify critical files exist
 if [ ! -f "llama-cli" ]; then
