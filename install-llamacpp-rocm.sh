@@ -63,8 +63,7 @@ ASSET_URL=$(echo "$ASSETS_JSON" | jq -r '.assets[] | select(.name | contains("gf
 if [ -z "$ASSET_URL" ]; then
     echo "Error: Could not find asset URL for gfx110X Ubuntu"
     echo "Available assets:"
-    echo "$ASSETS_JSON" | jq -r '.assets[].name' 2>/dev/null || \
-        echo "$ASSETS_JSON" | grep '"name":' | sed 's/.*"name": "\(.*\)"/  - \1/'
+    echo "$ASSETS_JSON" | jq -r '.assets[].name' 2>/dev/null
     exit 1
 fi
 
