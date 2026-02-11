@@ -60,6 +60,16 @@ if [ -z "$TAG" ]; then
     exit 1
 fi
 
+# Check if current version is already installed
+TAGFILE="$LLAMA_DIR/.rocm-tag"
+if [ -f "$TAGFILE" ]; then
+    INSTALLED_TAG=$(cat "$TAGFILE" 2>/dev/null)
+    if [ "$TAG" = "$INSTALLED_TAG" ] && [ "$FORCE" != "1" ]; then
+        echo "Version $TAG is already installed. Use FORCE=1 to reinstall."
+        exit 0
+    fi
+fi
+
 echo "Latest release: $TAG"
 
 # Find asset URL for RX 7900 XTX (gfx110X = RDNA 3, RX 7000 series)
@@ -107,3 +117,6 @@ if [ ! -f "llama-cli" ]; then
 fi
 
 echo "Installation complete! llama.cpp is in: $LLAMA_DIR"
+
+# Save current tag
+echo "$TAG" > "$TAGFILE"
