@@ -30,7 +30,7 @@ if [ ! -w "$LLAMA_DIR" ] && [ ! -w "$(dirname "$LLAMA_DIR")" ]; then
 fi
 
 # Safety: Check if ROCm/HIP is likely installed
-if ! command -v rocminfo &> /dev/null && ! ls /opt/rocm/hip/lib/*.so 2>/dev/null; then
+if ! command -v rocminfo &> /dev/null && ! ls /opt/rocm/hip/lib/*.so &>/dev/null; then
     echo "Warning: ROCm/HIP appears to be missing. This script requires ROCm runtime."
     echo "Install from: https://docs.amd.com/en/latest/rocm-install/Installing-RoCM.html"
 fi
