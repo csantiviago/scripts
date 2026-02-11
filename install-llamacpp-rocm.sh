@@ -82,8 +82,8 @@ if [ ! -f "$DOWNLOAD_FILE" ]; then
     exit 1
 fi
 
-# Get file size for sanity check
-FILE_SIZE=$(stat -f%z "$DOWNLOAD_FILE" 2>/dev/null || stat -c%s "$DOWNLOAD_FILE" 2>/dev/null)
+# Get file size for sanity check (Linux only, we verify OSTYPE earlier)
+FILE_SIZE=$(stat -c%s "$DOWNLOAD_FILE")
 if [ "$FILE_SIZE" -lt 100000 ]; then
     echo "Error: Download file is suspiciously small ($FILE_SIZE bytes). Network issue?"
     exit 1
