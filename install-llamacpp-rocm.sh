@@ -72,7 +72,7 @@ cd "$LLAMA_DIR"
 
 # Download the zip file
 DOWNLOAD_FILE="llama-rocm.zip"
-curl -sSL -o "$DOWNLOAD_FILE" "$ASSET_URL"
+curl -sfSL -o "$DOWNLOAD_FILE" "$ASSET_URL"
 
 # Check if download succeeded
 if [ ! -f "$DOWNLOAD_FILE" ]; then
