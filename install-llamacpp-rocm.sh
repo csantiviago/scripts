@@ -46,7 +46,7 @@ echo "Fetching latest release from $OWNER/$REPO..."
 LATEST_URL="https://api.github.com/repos/$OWNER/$REPO/releases/latest"
 
 # Parse JSON to get tag name and assets
-ASSETS_JSON=$(curl -s "$LATEST_URL")
+ASSETS_JSON=$(curl -sf "$LATEST_URL")
 TAG=$(echo "$ASSETS_JSON" | jq -r '.tag_name' 2>/dev/null)
 
 if [ -z "$TAG" ]; then
