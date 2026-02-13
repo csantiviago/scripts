@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+trap 'echo "Exiting."; exit 0' INT
+set -euo pipefail
+
+# Set default environment variables if not already set
+: "${ANTHROPIC_AUTH_TOKEN:=llama-swap}"
+: "${ANTHROPIC_BASE_URL:=http://localhost:9292}"
+export ANTHROPIC_AUTH_TOKEN ANTHROPIC_BASE_URL
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+
+# Fetch list of llama-swap models
+mapfile -t MODEL_ARRAY < <(
+    curl -s http://localhost:9292/v1/models 2>/dev/null | jq -r '.data[].id' | grep -v '^[[:space:]]*$'
+)
+
+# Check if any models were found
+if [[ ${#MODEL_ARRAY[@]} -eq 0 ]]; then
+    printf 'No llama-swap models available. Ensure llama-swap is running on port 9292.\n' >&2
+    exit 1
+fi
+
+
+# Prompt user to select a model
+echo 'Select a model:'
+select SELECTED_MODEL in "${MODEL_ARRAY[@]}" "Exit"; do
+    case "$SELECTED_MODEL" in
+        "Exit") echo "Exiting."; exit 0;;
+        "") echo "Invalid selection. Try again." >&2;;
+        *) printf 'Starting Claude with model: %s\n' "$SELECTED_MODEL"; break;;
+    esac
+done
+
+if [[ -z "$SELECTED_MODEL" ]]; then
+    echo "Exiting."
+    exit 0
+fi
+
+# Launch Claude with the chosen model
+claude --model "$SELECTED_MODEL"
