@@ -124,6 +124,10 @@ unzip -q -o -L "$DOWNLOAD_FILE"
 # Clean up zip (cleanup trap handles failure cases)
 rm -f "$DOWNLOAD_FILE"
 
+# Set executable permissions on binaries
+echo "Setting executable permissions..."
+chmod +x llama-cli llama-server llama-bench llama-quantize
+
 # Move contents up one level if zip had a top-level directory
 for item in llama-*; do
     if [ -d "$item" ]; then
