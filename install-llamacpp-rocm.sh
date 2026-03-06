@@ -133,6 +133,10 @@ for item in llama-*; do
     fi
 done
 
+# Set executable permissions on binaries
+echo "Setting executable permissions..."
+chmod +x llama-cli llama-server llama-bench llama-quantize
+
 # Verify critical files exist
 if [ ! -f "llama-cli" ]; then
     echo "Error: Extraction failed - llama-cli not found"
